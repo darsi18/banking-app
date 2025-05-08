@@ -1,55 +1,48 @@
-import os
-#get customer details
-def customer_details():
+def customer_info():
     customer_name=input("enter your number:")
     customer_address=input("enter your address:")
     customer_nic_no=int(input("enter your nic mumber:"))
-    customer_username=input("enter your phone number:")
-    customer_password=input("enter your password:")
-    return[customer_name,customer_address,customer_nic_no,customer_username,customer_password]
+    customer_phone_number=int(input("enter your phone number:"))
+customer_info()
 
-#store customer & user details
-def create_customer():
-    customers=customer_details()
-    with open("customer.txt","a")as file:
-        file.write(f"{customer[0]},{customers[2]}\n)")
+user_name="darsi"
+pass_word="1234"
 
-def create_user():
-    customers=customer_details()
-    with open("users.txt","a")as file:
-        file.write(f"{customers[3]},{customers[4]}\n")
+maxattempts=3
+attempts=0
 
-def auto_id():
-    with open("users.txt","r")as user_file:
-        user_id=user_file.readlines()[-1].split(",")[0]
-        characters=list(user_id)
+while attempts < maxattempts:
+    username=input("enter your user name:")
+    password=input("enter your password:")
 
-def create_auto_id():
-    try:
-        with open("customer.txt","r")as customer_file:
-            lines=customer_file.readlines()
-            if not lines:
-                return"a1"
-            last_id_str=lines[-1].split(",")[0]
-            last_id_num=int(last_id_str[1:])
-            return f"a{last_id_num+1}"
-    except FileNotFoundError:
-            return"a1"
+if username==user_name and password==pass_word:
+    print("your succussfully signin the account.")
+else:
+  attempts=attempts+1
+  remaining = maxattempts-attempts
+  print(f"one time left")
+
+if attempts==maxattempts:
+   print("too many failed attempts.exiting program.")
+
+accounts={}
+next_account_number=111
 
 def account_creation():
-    accounts=[]
+    global next_account_number
     name=input("enter your holder name:")
     balance=float(input("enter your initial balance:"))
-    if balance > 0:
-        print("initial balance is:{balance}")
+    if initial_balance < 0:
+        print("initial balance must be non_negative!")
         return
+    
+    account_number=int(next_account_number)
+    next_acount_number +=1
     accounts[account_number]={'name':'name','balance':float(balance),'transaction':[f"account created with balance{balance}"]}
     print(f"account sucessfully creted.your account number is:{account_number}")
 
-
 def deposit_money():
     acc_no=input("enter your account number:")
-    accounts=[]
     if acc_no not in accounts:
         print("accounts is not found.")
         return
@@ -94,7 +87,7 @@ def transaction_history():
         print(transaction)
 
 def menu():
-    while True:
+    while true:
         print("\n mini banking system")
         print("1.create account")
         print("2.deposit money")
@@ -107,29 +100,17 @@ def menu():
 
         if choice=='1':
             account_creation()
-        elif choice=='2':
+        if choice=='2':
             deposit_money()
-        elif choice=='3':
+        if choice=='3':
             withdraw_money()
-        elif choice=='4':
+        if choice=='4':
             (check_balance)
-        elif choice=='5':
+        if choice=='5':
             (transactiom_history)
-        elif choice=='6':
+        if choice=='6':
             ("exiting")
-            break 
-        else:
-         ("thank you.")
-menu()
-    
+        break 
+    else:
+        ("thank you.")
 
-
-
-
-
-
-
-
-
-
- 
