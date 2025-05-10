@@ -10,32 +10,54 @@ def customer_details():
 customer_details()
 
 #store customer & user details
-def create_customer():
-    customers=customer_details()
+def create_customer(customer):
     with open("customer.txt","a")as file:
-        file.write(f"{customers[0]},{customers[2]}\n")
+        file.write(f"{create_customer_next_id()},{customer[0]},{customer[1]},{customer[2]}\n")
+        print("customer details saved.")
 
-def create_user():
-    customers=customer_details()                                                                                                                                                                                                
+def create_user(customer):                                                                                                                                                                                               
     with open("users.txt","a")as file:
-        file.write(f"{customers[3]},{customers[4]}\n")
+        file.write(f"{customer[3]},{customer[4]}\n")
+        print("user details saved.")
 
 def auto_id():
-    with open("users.txt","r")as user_file:
-        user_id=user_file.readlines()[-1].split(",")[0]
-        characters=list(user_id)
-
-def create_auto_id():
     try:
+        with open("customer.txt","r")as file:
+            lines=customer_file.readlines()
+            if not lines:
+                return"A1"
+            last_id_str=lines[-1].split(",")[0]
+            last_id_num=int(last_id_str[1:])
+            return f"A{last_id_num+1}"
+    except FileNotFoundError:
+        return"A1"
+
+    def user_login():
+        username=input("enter your user name:")
+        password=input("enter your password:")
+        try:
+            with open("user.txt","r")as file:
+                for line in file:
+                    username,password=line.strip().split(",")
+                    if user==username and password==password:
+                        print("login successful.")
+                        return True
+        except FileNotFoundError:
+            pass
+        print("invalid username and password!")
+        return False
+    
+    def create_auto_id():
+        try:
         with open("customer.txt","r")as customer_file:
             lines=customer_file.readlines()
             if not lines:
-                return"a1"
+                return"A1"
             last_id_str=lines[-1].split(",")[0]
             last_id_num=int(last_id_str[1:])
-            return f"a{last_id_num+1}"
-    except FileNotFoundError:
-            return"a1"
+            return f"A{last_id_num+1}"
+        except FileNotFoundError:
+            return"A1"
 
 def account_creation():
     accounts=[]
@@ -135,8 +157,237 @@ def check_balance():
         print("account file not error")
     except IOError:
         print("error")
+
+#transaction history
+
+def store_history(account_number,trasaction_type,amount,new_balance):
+    try:
+        with open("transaction.txt","a")as file:
+            file.write(f"{account_number},{transaction_type},{amount},{new_balance}\n")
+    except IOError:
+        print("error")
+
+def display_transaction_history(account_number):
+    try:
+        with open("transaction.txt","r")as file:
+            print("\n---transaction history---")
+            print("{:<12} {:<10} {:<12}".format("type","amount","balance"))
+            print("-"*30)
+            found=False
+            for line in file:
+                data=line.strip().split(",")
+                if data[0]==account_number:
+                    print("{:<12} {:<10} {:<12}".format(data[1],data[2],data[3]))
+                    found=True
+            if not found:
+                print("no trasaction found!")
+    except FileNotFoundError:
+        print("trasaction file found!")
+    except IOError:
+        print("error")
+
+ #trasation bitween 2 accounts
+
+def transfer(sender_account,receiver_account,amount):
+    if amount<=0:
+        print("transfer amount must be greaterthan zero.")
+        return
+    try:
+        accounts=[]
+        sender_found=False
+        receiver_found=False
+        sender_balance=0.0
+        receiver_balance=0.0
+
+#store all accounts
+    with open("accounts.txt","r")as file:
+        for line in file:
+            name,password,account_number,balance=line.strip().split(",")
+            balance=float(balance)
+
+            if account_number==sender_account:
+                sender_found=True
+                if balance<amount:
+                print("insufficiant fund in sender accounts!")
+                return
+            
+            sender_balance=balance_amount
+            updated_line=f"{name},{password},{account_number},{sender_balance}\n"
+            accounts.append(updated_line)
+        elif account_number==receiver_account:
+            receiver_found=True
+            receiver_balance=balance+amount
+            updated_line=f"{name},{password},{accoun_number},{receiver_balance}\n"
+            amount.append(updated_line)
+            else:
+            accounts.append(line)
+        if not receiver_found:
+            print("receicver account is not found!")
+            return
+        with open("accounts.txt","w")as file:
+            file.writelines(accounts)
+
+#store account deatails
+        record_transaction(sender_account,"transfer out",amount,sender_balance)
+        record_transaction(receiver_account,"trasfer in",amount,receiver_balance)
+        print("successfully trasfferd {amount}from{sender_account}to{receiver_account}")
+        except FileNotFoundError:
+        print("accoun file not found!")
+        except IOError:
+        print("errorv occurred while accessing the file.")
+
+def user_menu():
+    while True:
+        print("\n---banking system---")
+        print("1.register user")
+        print("2.login")
+        print("3.exit")
+        choice==input("enter your choice:")
+
+        if choice=="1":
+            customer=customer_details()
+            if customer:
+                save_customer(customer)
+                save-user(customer)
+
+        elif choice=="2":
+            if user_login
+                while True
+                    print("main menu is here")
+                    print("1.create bank account")
+                    print("2.deposit money")
+                    print("3.withrawal money")
+                    print("4.check balance")
+                    print('5.transaction history')
+                    print("6.transaction bitween two accounts")
+                    menu_choice=input("enter your choice")
+
+                    if menu_choice=="1":
+                        account_craetion()
+                    elif menu_choice=="2":
+                        acc_num=input("enter your account number:")
+                        try:
+                            amt=float(input("enter your deposit amount:"))
+                            deposit(acc,amt)
+                        except ValueError:
+                            print("invalid amount")
+                    elif menu_choice=="3":
+                       acc_num=input("enter your account number:")
+                        try:
+                            amt=float(input("enter your withrawal amount:"))
+                            withraw(acc,amt)
+                        except ValueError:
+                            print("invalid amount") 
+                    elif menu_choice=="4":
+                        check_balance()
+                    elif menu_choice=="5":
+                        acc_num=input("enter your account number:")
+                        display_transaction_history(acc_num)
+                    elif menu_choice=="6":
+                        sender_account=input("enter the sender's account number:")
+                        receiver_account=input("enter the receiver'saccount number:")
+                        try:
+                            amount=float(input("enter the amount;"))
+                            transfer(sender_account,receiver_account,amount)
+                        except ValueError:
+                            print("invalid amount!")
+                        else:
+                            print("invalid option")
+            elif choice=="3":
+                print("thank you")
+                break
+            else:
+                print("invalid choice!")
+
+user_menu()
+
+                                                     
+
+
+
+
     
-    #trasation history
+
+
+
+
+
+    
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
