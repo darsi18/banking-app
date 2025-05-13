@@ -72,13 +72,13 @@ def deposit_money(acc_number,amount):
 
         with open("accounts.txt","r")as file:
             for line in file:
-                name,account_number,balance=line.strip().split(",")
+                account_number,name,balance=line.strip().split(",")
                 if acc_number==account_number:
                     account_found=True
                     new_balance=float(balance)+amount
                     print(f"successfully deposited {amount}.New balance is: {new_balance}")
 
-                    line=f"{account_number};{name};{new_balance}\n"   
+                    line=f"{account_number},{name},{new_balance}\n"   
                     accounts.append(line)
 
                     store_history(acc_number,"deposit",amount,new_balance) 
@@ -88,13 +88,15 @@ def deposit_money(acc_number,amount):
         if not account_found:
             print("account is not found.")
 
-        with open("accounts.txt","r")  as file:
+        with open("accounts.txt","w")  as file:
             file.writelines(accounts)
+    except FileNotFoundError:
+        print("accounts file is not found")
     except IOError:
         print("an error occurated while reading or writing to the file")
 
-
-def withdraw_money(account_number,amount):
+#withdraw money
+def withdraw_money(acc_number,amount):
     if amount<=0:
         print("enter the amount must be greater than zero!")
         return
@@ -103,10 +105,10 @@ def withdraw_money(account_number,amount):
         account_found = False
         accounts=[]
 
-        with open("accounts.txt","r")as file:
+        with open("accounts.txt","w")as file:
             for line in file:
-                name,password,account_number=line.strip().split(",")
-                if account_number==account_number:
+                name,account_number,balance=line.strip().split(",")
+                if acc_number==account_number:
                     account_found=True
                     balance=float(balance)
                     if amount>balance:
@@ -115,7 +117,7 @@ def withdraw_money(account_number,amount):
                     else:
                         balance-=amount
                         print(f"successfully withrawal amount{amount}.new balance is:{balance}.")
-                        line=f"{name},{password},{account_number},{balance}\n"
+                        line=f"{name},{account_number},{balance}\n"
                         display_transaction_history(account_number,"withdraw",amount,balance)
                         accounts.append(line)
                 else:
@@ -132,14 +134,14 @@ def withdraw_money(account_number,amount):
     except IOError:
         print("error")
 
-
+#check the balance
 def check_balance():
     account_number=input("enter your account number:")
     try:
         with open("accounts.txt","r")as file:
             for line in file:
-                account_number,balance=line.strip().split(",")
-                if account_number==account_number:
+                acc_number,balance=line.strip().split(",")
+                if acc_number==account_number:
                     print(f"account balance is:{balance}")
                     return
         print("account not found.")
@@ -153,7 +155,7 @@ def check_balance():
 def store_history(account_number,trasaction_type,amount,new_balance):
     try:
         with open("transaction.txt","a")as file:
-            file.write(f"{account_number},{display_transaction_history},{amount},{new_balance}\n")
+            file.write(f"{account_number},deposit,{amount},{new_balance}\n")
     except IOError:
         print("error")
 
@@ -258,14 +260,14 @@ def user_menu():
                     if menu_choice=="1":
                         account_creation()
                     elif menu_choice=="2":
-                        acc=input("enter your account number:")
+                        acc_number=input("enter your account number:")
                         try:
                             amt=int(input("enter your deposit amount:"))
-                            deposit_money(acc,amt)
+                            deposit_money(acc_number,amt)
                         except ValueError:
                             print("invalid amount")
                     elif menu_choice=="3":
-                        acc_num=input("enter your account number:")
+                        acc_number=input("enter your account number:")
                         try:
                             amt=float(input("enter your withrawal amount:"))
                             withdraw_money(acc_num,amt)
