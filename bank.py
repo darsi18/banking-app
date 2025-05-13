@@ -8,21 +8,23 @@ def customer_details():
     return[customer_name,customer_address,customer_username,customer_password]
 customer_details()
 
-#store customer & user details
+#store data as a customer file
 def create_customer(customer):
     with open("customer.txt","a")as file:
         file.write(f"{auto_id()},{customer[0]},{customer[1]},\n")
         print("customer details successfully saved.")
 
+#store data as a user file
 def create_user(customer):                                                                                                                                                                                               
     with open("users.txt","a")as file:
         file.write(f"{customer[2]},{customer[3]}\n")
         print("user details saved.")
 
+#create auto generate account number
 def auto_id():
     try:
-        with open("customer.txt","r")as file:
-            lines=file.readlines()
+        with open("customer.txt","r")as customer_file:
+            lines=customer_file.readlines()
             if not lines:
                 return"A1"
             last_id_str=lines[-1].split(",")[0]
@@ -31,6 +33,7 @@ def auto_id():
     except FileNotFoundError:
         return"A1"
 
+#login the accounts
 def user_login():
         username=input("enter your user name:")
         password=input("enter your password:")
@@ -46,18 +49,7 @@ def user_login():
         print("login failed!.")
         return False
     
-def create_auto_id():
-        try:
-            with open("customer.txt","r")as customer_file:
-                for lines in customer_file.readlines():
-                    if not lines:
-                        return"A1"
-                    last_id_str=lines[-1].split(",")[0]
-                    last_id_num=int(last_id_str[1:])
-                    return f"A{last_id_num+1}"
-        except FileNotFoundError:
-            return"A1"
-
+#create account
 def account_creation():
     account_number=input("enter your account number:")
     name=input("enter your holder name:")
@@ -69,18 +61,19 @@ def account_creation():
         file.write(f"{account_number},{name},{balance}")
         print(f"account sucessfully creted.your account number is:{account_number}")
 
-def deposit_money(account_number,amount):
+#deposit money
+def deposit_money(acc_number,amount):
     if amount<=0:
         print("amount must be greater than zero!")
         return
     try:
-        account_found = False
         accounts=[]
+        account_found = False
 
         with open("accounts.txt","r")as file:
             for line in file:
                 name,account_number,balance=line.strip().split(",")
-                if account_number==account_number:
+                if acc_number==account_number:
                     account_found=True
                     new_balance=float(balance)+amount
                     print(f"successfully deposited {amount}.New balance is: {new_balance}")
@@ -88,17 +81,17 @@ def deposit_money(account_number,amount):
                     line=f"{account_number};{name};{new_balance}\n"   
                     accounts.append(line)
 
-                    store_history(account_number,"deposit",amount,new_balance) 
+                    store_history(acc_number,"deposit",amount,new_balance) 
                 else: 
                     accounts.append(line)
 
         if not account_found:
             print("account is not found.")
 
-        with open("accounts.txt","w")  as file:
+        with open("accounts.txt","r")  as file:
             file.writelines(accounts)
     except IOError:
-        print("error")
+        print("an error occurated while reading or writing to the file")
 
 
 def withdraw_money(account_number,amount):
@@ -265,10 +258,10 @@ def user_menu():
                     if menu_choice=="1":
                         account_creation()
                     elif menu_choice=="2":
-                        acc_num=input("enter your account number:")
+                        acc=input("enter your account number:")
                         try:
                             amt=int(input("enter your deposit amount:"))
-                            deposit_money(acc_num,amt)
+                            deposit_money(acc,amt)
                         except ValueError:
                             print("invalid amount")
                     elif menu_choice=="3":
