@@ -236,7 +236,6 @@ def user_menu():
         print("\n---banking Options Are Here---")
         print("1.Register User")
         print("2.Login")
-        print("3.Exit")
         choice = input("Enter your choice:")
 
         if choice=="1":
@@ -255,18 +254,19 @@ def user_menu():
                     print("4.Check Balance")
                     print('5.Transaction History')
                     print("6.Transaction bitween two accounts")
-                    menu_choice=input("Enter your choice:")
+                    print("7.Exit")
+                    user_option=input("Enter your choice:")
 
-                    if menu_choice=="1":
+                    if user_option=="1":
                         account_creation()
-                    elif menu_choice=="2":
+                    elif user_option=="2":
                         acc_number=input("Enter your account number:")
                         try:
                             amt=float(input("Enter your deposit amount:"))
                             deposit_money(acc_number,amt)
                         except ValueError:
                             print("Successfully Deposited.")
-                    elif menu_choice=="3":
+                    elif user_option=="3":
                         acc_number=input("Enter your account number:")
                         try:
                             amt=float(input("Enter your withrawal amount:"))
@@ -274,26 +274,26 @@ def user_menu():
                         except ValueError:
                             print("Successfully withdrawal")
                         
-                    elif menu_choice=="4":
+                    elif user_option=="4":
                         check_balance()
-                    elif menu_choice=="5":
+                    elif user_option=="5":
                         acc_num=input("Enter your account number:")
                         display_transaction_history(acc_num)
-                    elif menu_choice=="6":
+                    elif user_option=="6":
                         sender_account=input("Enter the sender's account number:")
                         receiver_account=input("Enter the receiver'saccount number:")
                         try:
-                            amount=float(input("Enter the amount;"))
+                            amount=float(input("Enter the amount:"))
                             transfer(sender_account,receiver_account,amount)
                         except ValueError:
-                            print("Invalid amount!")
+                            print("Invalid amount:")
                         else:
                             print("Invalid option")
-        elif choice=="3":
-            print("\n---Thank you for using our bank---")
-            break
-        else:
-            print("Invalid choice please try again!")
+                    elif user_option=="7":
+                            print("\n---Thank you for using our bank---")
+                            break
+                    else:
+                        print("Invalid choice please try again!")
 
 user_menu()
     
