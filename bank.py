@@ -1,12 +1,31 @@
 import os
+
 #get customer details
 def customer_details():
     customer_name=input("Enter Your Name:")
     customer_address=input("Enter Your Address:")
     customer_username=input("Enter Your user Name:")
-    customer_password=input("Enter Your Password:")
-    return[customer_name,customer_address,customer_username,customer_password]
+    return[customer_name,customer_address,customer_username]
 customer_details()
+
+#password length
+def password_check():
+    while True:
+        customer_password=input("Enter your password(minimum six characters):")
+        if len(customer_password)>=6:
+            print("your password is correct")
+        else:
+            print("please enter must be six characters!")
+        return[customer_password]
+password_check()
+
+'''
+#change password
+def change_password(username,customer):
+    try:
+        with open("users.txt","r")as file:
+            for line in file:
+'''
 
 #store data as a customer file
 def create_customer(customer):
@@ -17,8 +36,20 @@ def create_customer(customer):
 #store data as a user file
 def create_user(customer):                                                                                                                                                                                               
     with open("users.txt","a")as file:
-        file.write(f"{customer[2]},{customer[3]}\n")
+        file.write(f"{customer[2]},{customer[3]},{customer[4]}\n")
         print("User details successfully saved.")
+
+#check admin status
+def admin_status(customer_username):
+    customer_password=input("enter your password:")
+    with open("user.txt","r") as file:
+        for line in file:
+            user,pwd=line.strip().split(",")
+            if customer_username==user and customer_password==pwd:
+                print("your a admin")
+            else:
+                print("you are a customer")
+admin_status()
 
 #create auto generate account number
 def auto_id():
@@ -48,7 +79,7 @@ def user_login():
             pass
         print("login failed! please try again later!.")
         return False
-    
+
 #create account
 def account_creation():
     account_number=input("Enter your account number:")
@@ -254,7 +285,10 @@ def user_menu():
                     print("4.Check Balance")
                     print('5.Transaction History')
                     print("6.Transaction bitween two accounts")
-                    print("7.Exit")
+                    print("7.display customer list")
+                    print("8.check admin ststus")
+                    print("9.Exit")
+                  
                     user_option=input("Enter your choice:")
 
                     if user_option=="1":
@@ -290,6 +324,10 @@ def user_menu():
                         else:
                             print("Invalid option")
                     elif user_option=="7":
+                        customer_details()
+                    elif user_option=="8":
+                        admin_status()
+                    elif user_option=="9":
                             print("\n---Thank you for using our bank---")
                             break
                     else:
